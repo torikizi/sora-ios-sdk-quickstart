@@ -14,10 +14,12 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var senderVideoView: VideoView!
     @IBOutlet weak var senderMultiplicityControl: UISegmentedControl!
+    @IBOutlet weak var senderStreamingModeControl: UISegmentedControl!
     @IBOutlet weak var senderConnectButton: UIButton!
     
     @IBOutlet weak var receiverVideoView: VideoView!
     @IBOutlet weak var receiverMultiplicityControl: UISegmentedControl!
+    @IBOutlet weak var receiverStreamingModeControl: UISegmentedControl!
     @IBOutlet weak var receiverConnectButton: UIButton!
     @IBOutlet weak var receiverRidControl: UISegmentedControl!
 
@@ -54,11 +56,13 @@ class ViewController: UIViewController {
         if let mediaChannel = senderMediaChannel {
             disconnect(mediaChannel: mediaChannel,
                        multiplicityControl: senderMultiplicityControl,
+                       streamingModeControl: senderStreamingModeControl,
                        connectButton: senderConnectButton)
             senderMediaChannel = nil
         } else {
             connect(role: .sendonly,
                     multiplicityControl: senderMultiplicityControl,
+                    streamingModeControl: senderStreamingModeControl,
                     connectButton: senderConnectButton,
                     videoView: senderVideoView)
             { mediaChannel in
@@ -71,11 +75,13 @@ class ViewController: UIViewController {
         if let mediaChannel = receiverMediaChannel {
             disconnect(mediaChannel: mediaChannel,
                        multiplicityControl: receiverMultiplicityControl,
+                       streamingModeControl: receiverStreamingModeControl,
                        connectButton: receiverConnectButton)
             receiverMediaChannel = nil
         } else {
             connect(role: .recvonly,
                     multiplicityControl: receiverMultiplicityControl,
+                    streamingModeControl: receiverStreamingModeControl,
                     connectButton: receiverConnectButton,
                     videoView: receiverVideoView)
             { mediaChannel in
@@ -90,6 +96,15 @@ class ViewController: UIViewController {
                     self.receiverRidControl.selectedSegmentIndex = 0
                 }
             }
+        }
+    }
+    
+    @IBAction func changeReceiverStreamingMode(_ sender: AnyObject) {
+        switch receiverStreamingModeControl.selectedSegmentIndex {
+        case 1: // サイマルキャスト
+            receiverRidControl.isEnabled = true
+        default:
+            receiverRidControl.isEnabled = false
         }
     }
     
@@ -188,25 +203,43 @@ class ViewController: UIViewController {
     
     func connect(role: Role,
                  multiplicityControl: UISegmentedControl,
+                 streamingModeControl: UISegmentedControl,
                  connectButton: UIButton,
                  videoView: VideoView,
                  completionHandler: @escaping (MediaChannel?) -> Void) {
         DispatchQueue.main.async {
             connectButton.isEnabled = false
             multiplicityControl.isEnabled = false
+            streamingModeControl.isEnabled = false
             self.audioModeButton.isEnabled = false
         }
         
         // 接続の設定を行います。
         let multistreamEnabled = multiplicityControl.selectedSegmentIndex == 1
-        let simulcastEnabled = multiplicityControl.selectedSegmentIndex == 2
+        let simulcastEnabled = streamingModeControl.selectedSegmentIndex == 1
+        let spotlightEnabled = streamingModeControl.selectedSegmentIndex == 2
         var config = Configuration(url: soraURL,
                                    channelId: soraChannelId,
                                    role: role,
                                    multistreamEnabled: multistreamEnabled)
         config.simulcastEnabled = simulcastEnabled
-        if simulcastEnabled {
+        config.spotlightEnabled = spotlightEnabled
+        if simulcastEnabled || spotlightEnabled {
             config.videoCodec = .vp8
+        }
+        if simulcastEnabled {
+            if role == .recvonly {
+                switch receiverRidControl.selectedSegmentIndex {
+                case 0:
+                    config.simulcastRid = .r0
+                case 1:
+                    config.simulcastRid = .r1
+                case 2:
+                    config.simulcastRid = .r2
+                default:
+                    break
+                }
+            }
         }
         
         // 接続します。
@@ -244,6 +277,7 @@ class ViewController: UIViewController {
     
     func disconnect(mediaChannel: MediaChannel,
                     multiplicityControl: UISegmentedControl,
+                    streamingModeControl: UISegmentedControl,
                     connectButton: UIButton) {
         if mediaChannel.isAvailable {
             // 接続解除します。
@@ -252,11 +286,15 @@ class ViewController: UIViewController {
         
         DispatchQueue.main.async {
             multiplicityControl.isEnabled = true
+            streamingModeControl.isEnabled = true
             connectButton.setImage(UIImage(systemName: "play.fill"),
                                    for: .normal)
             self.audioModeButton.isEnabled = false
-            self.receiverRidControl.isEnabled = false
-            self.receiverRidControl.selectedSegmentIndex = 0
+            if mediaChannel == self.receiverMediaChannel {
+                self.receiverRidControl.isEnabled = false
+                self.speakerButton.isEnabled = false
+                self.volumeSlider.isEnabled = false
+            }
         }
     }
     

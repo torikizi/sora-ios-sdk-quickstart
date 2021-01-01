@@ -35,10 +35,10 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="668-DK-9LW">
-                                <rect key="frame" x="331" y="98" width="28" height="28"/>
+                                <rect key="frame" x="327" y="96" width="32" height="32"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="28" id="OWk-Os-jt3"/>
-                                    <constraint firstAttribute="height" constant="28" id="xQ3-pI-8uI"/>
+                                    <constraint firstAttribute="width" constant="32" id="OWk-Os-jt3"/>
+                                    <constraint firstAttribute="height" constant="32" id="xQ3-pI-8uI"/>
                                 </constraints>
                                 <state key="normal" image="play.fill" catalog="system"/>
                                 <connections>
@@ -46,14 +46,13 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="cJF-Kr-J9l">
-                                <rect key="frame" x="183" y="96" width="136" height="32"/>
+                                <rect key="frame" x="225" y="96" width="90" height="32"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="2Pj-MH-KRF"/>
+                                    <constraint firstAttribute="width" constant="90" id="2Pj-MH-KRF"/>
                                 </constraints>
                                 <segments>
                                     <segment title="" image="person.fill" catalog="system"/>
                                     <segment title="" image="person.2.fill" catalog="system"/>
-                                    <segment title="" image="arrow.triangle.branch" catalog="system"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" systemColor="systemGreenColor"/>
                             </segmentedControl>
@@ -67,10 +66,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="q7m-bU-XV5">
-                                <rect key="frame" x="331" y="400" width="28" height="28"/>
+                                <rect key="frame" x="327" y="398" width="32" height="32"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="28" id="loy-Am-S2j"/>
-                                    <constraint firstAttribute="height" constant="28" id="vLa-P4-dH9"/>
+                                    <constraint firstAttribute="width" constant="32" id="loy-Am-S2j"/>
+                                    <constraint firstAttribute="height" constant="32" id="vLa-P4-dH9"/>
                                 </constraints>
                                 <state key="normal" image="play.fill" catalog="system"/>
                                 <connections>
@@ -78,14 +77,13 @@
                                 </connections>
                             </button>
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bordered" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mDh-UT-v1r">
-                                <rect key="frame" x="183" y="398" width="136" height="32"/>
+                                <rect key="frame" x="225" y="398" width="90" height="32"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="120" id="XwX-Tn-hUE"/>
+                                    <constraint firstAttribute="width" constant="90" id="XwX-Tn-hUE"/>
                                 </constraints>
                                 <segments>
                                     <segment title="" image="person.fill" catalog="system"/>
                                     <segment title="" image="person.2.fill" catalog="system"/>
-                                    <segment title="" image="arrow.triangle.branch" catalog="system"/>
                                 </segments>
                                 <color key="selectedSegmentTintColor" systemColor="systemGreenColor"/>
                             </segmentedControl>
@@ -123,9 +121,37 @@
                                     <action selector="changeRid:" destination="BYZ-38-t0r" eventType="valueChanged" id="CUL-gJ-DYb"/>
                                 </connections>
                             </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="4Lz-0W-j8w">
+                                <rect key="frame" x="89" y="96" width="128" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="128" id="F8T-sI-3rk"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="" image="minus" catalog="system"/>
+                                    <segment title="" image="arrow.triangle.branch" catalog="system"/>
+                                    <segment title="" image="magnifyingglass" catalog="system"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" systemColor="systemGreenColor"/>
+                            </segmentedControl>
+                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Bhe-YE-0Y4">
+                                <rect key="frame" x="89" y="398" width="128" height="32"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="128" id="Ahh-cs-5Cz"/>
+                                </constraints>
+                                <segments>
+                                    <segment title="" image="minus" catalog="system"/>
+                                    <segment title="" image="arrow.triangle.branch" catalog="system"/>
+                                    <segment title="" image="magnifyingglass" catalog="system"/>
+                                </segments>
+                                <color key="selectedSegmentTintColor" systemColor="systemGreenColor"/>
+                                <connections>
+                                    <action selector="changeReceiverStreamingMode:" destination="BYZ-38-t0r" eventType="valueChanged" id="tee-7O-HEF"/>
+                                </connections>
+                            </segmentedControl>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="4Lz-0W-j8w" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="1rS-ez-uB1"/>
                             <constraint firstItem="cJF-Kr-J9l" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" symbolic="YES" id="26M-bZ-LX9"/>
                             <constraint firstItem="2h7-KS-GO5" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="12" id="2uX-HS-7E9"/>
                             <constraint firstItem="w0z-fp-Nsc" firstAttribute="leading" secondItem="3Vu-8h-ehO" secondAttribute="trailing" constant="12" id="3yS-hh-41A"/>
@@ -134,7 +160,8 @@
                             <constraint firstItem="Lpq-Hw-Peo" firstAttribute="top" secondItem="yEk-wo-i1h" secondAttribute="bottom" constant="8" symbolic="YES" id="6tJ-ZM-Llz"/>
                             <constraint firstAttribute="trailing" secondItem="QFe-mz-Beo" secondAttribute="trailing" id="82U-gL-lsn"/>
                             <constraint firstItem="QFe-mz-Beo" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="C9I-7Q-6eJ"/>
-                            <constraint firstItem="q7m-bU-XV5" firstAttribute="top" secondItem="QFe-mz-Beo" secondAttribute="bottom" constant="10" id="DQW-qz-gwm"/>
+                            <constraint firstItem="mDh-UT-v1r" firstAttribute="leading" secondItem="Bhe-YE-0Y4" secondAttribute="trailing" constant="8" id="DNW-Gp-Zy0"/>
+                            <constraint firstItem="q7m-bU-XV5" firstAttribute="top" secondItem="QFe-mz-Beo" secondAttribute="bottom" constant="8" id="DQW-qz-gwm"/>
                             <constraint firstItem="yEk-wo-i1h" firstAttribute="top" secondItem="QFe-mz-Beo" secondAttribute="bottom" constant="48" id="Deo-Oa-gzd"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="3Vu-8h-ehO" secondAttribute="bottom" constant="8" id="Eue-at-BEu"/>
                             <constraint firstItem="Yrl-cz-Acc" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="12" id="F7O-zv-l2F"/>
@@ -147,6 +174,7 @@
                             <constraint firstItem="QFe-mz-Beo" firstAttribute="top" secondItem="2h7-KS-GO5" secondAttribute="bottom" constant="8" id="Pce-T5-rTT"/>
                             <constraint firstItem="cJF-Kr-J9l" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Yrl-cz-Acc" secondAttribute="trailing" constant="8" symbolic="YES" id="Pd9-V7-4vo"/>
                             <constraint firstItem="HeN-Xc-A4g" firstAttribute="top" secondItem="QFe-mz-Beo" secondAttribute="bottom" constant="12" id="QHp-bH-ikn"/>
+                            <constraint firstItem="Bhe-YE-0Y4" firstAttribute="top" secondItem="QFe-mz-Beo" secondAttribute="bottom" constant="8" id="TOc-3Q-mbM"/>
                             <constraint firstAttribute="trailingMargin" secondItem="w0z-fp-Nsc" secondAttribute="trailing" id="Tcl-xt-CgY"/>
                             <constraint firstItem="2h7-KS-GO5" firstAttribute="top" secondItem="cJF-Kr-J9l" secondAttribute="bottom" constant="8" id="Vvh-pX-Trq"/>
                             <constraint firstItem="w0z-fp-Nsc" firstAttribute="top" secondItem="Lpq-Hw-Peo" secondAttribute="bottom" constant="8" id="Y4p-Te-AQT"/>
@@ -154,7 +182,7 @@
                             <constraint firstAttribute="trailingMargin" secondItem="Lpq-Hw-Peo" secondAttribute="trailing" id="bLX-Ko-pmW"/>
                             <constraint firstAttribute="trailing" secondItem="q7m-bU-XV5" secondAttribute="trailing" constant="16" id="cVo-7Q-QY1"/>
                             <constraint firstItem="yEk-wo-i1h" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="12" id="f0C-Rc-gyg"/>
-                            <constraint firstItem="668-DK-9LW" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="10" id="fdQ-1j-9Pn"/>
+                            <constraint firstItem="668-DK-9LW" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="fdQ-1j-9Pn"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="w0z-fp-Nsc" secondAttribute="bottom" constant="4" id="fh1-2u-VNi"/>
                             <constraint firstItem="Yrl-cz-Acc" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="kyT-mg-aaa"/>
                             <constraint firstItem="HeN-Xc-A4g" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="mcd-uT-s16"/>
@@ -162,6 +190,7 @@
                             <constraint firstItem="2h7-KS-GO5" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="t2p-N0-W5K"/>
                             <constraint firstAttribute="trailing" secondItem="yEk-wo-i1h" secondAttribute="trailing" constant="12" id="wil-jM-vMS"/>
                             <constraint firstItem="mDh-UT-v1r" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="HeN-Xc-A4g" secondAttribute="trailing" constant="8" symbolic="YES" id="wpo-S2-P4P"/>
+                            <constraint firstItem="cJF-Kr-J9l" firstAttribute="leading" secondItem="4Lz-0W-j8w" secondAttribute="trailing" constant="8" id="y61-cb-rHP"/>
                         </constraints>
                     </view>
                     <toolbarItems/>
@@ -183,9 +212,11 @@
                         <outlet property="receiverConnectButton" destination="q7m-bU-XV5" id="sa1-uq-3vh"/>
                         <outlet property="receiverMultiplicityControl" destination="mDh-UT-v1r" id="ohq-LV-FBK"/>
                         <outlet property="receiverRidControl" destination="Lpq-Hw-Peo" id="fsW-L9-IJs"/>
+                        <outlet property="receiverStreamingModeControl" destination="Bhe-YE-0Y4" id="tDy-va-lNa"/>
                         <outlet property="receiverVideoView" destination="yEk-wo-i1h" id="aaS-gm-GWc"/>
                         <outlet property="senderConnectButton" destination="668-DK-9LW" id="26q-KH-0Fc"/>
                         <outlet property="senderMultiplicityControl" destination="cJF-Kr-J9l" id="Oem-3W-Q84"/>
+                        <outlet property="senderStreamingModeControl" destination="4Lz-0W-j8w" id="Z1j-VV-3kr"/>
                         <outlet property="senderVideoView" destination="2h7-KS-GO5" id="ZkD-WB-F3K"/>
                         <outlet property="speakerButton" destination="3Vu-8h-ehO" id="wf2-Dd-kkz"/>
                         <outlet property="volumeSlider" destination="w0z-fp-Nsc" id="P7D-iW-GeG"/>
@@ -214,6 +245,8 @@
     </scenes>
     <resources>
         <image name="arrow.triangle.branch" catalog="system" width="128" height="108"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
+        <image name="minus" catalog="system" width="128" height="24"/>
         <image name="person.2.fill" catalog="system" width="128" height="80"/>
         <image name="person.fill" catalog="system" width="128" height="120"/>
         <image name="play.fill" catalog="system" width="116" height="128"/>
