@@ -64,5 +64,10 @@
 	<string>WebRTC</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>WebRTC</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>

@@ -4,8 +4,11 @@ import Sora
 // 接続するサーバーのシグナリング URL
 let soraURL = URL(string: "ws://192.168.0.2:5000/signaling")!
 
+let soraAPIPort = 3000
 // チャネル ID
 let soraChannelId = "ios-quickstart"
+
+let logType = LogType.user("SoraQuickStart")
 
 class ViewController: UIViewController {
     
@@ -16,7 +19,8 @@ class ViewController: UIViewController {
     @IBOutlet weak var receiverVideoView: VideoView!
     @IBOutlet weak var receiverMultiplicityControl: UISegmentedControl!
     @IBOutlet weak var receiverConnectButton: UIButton!
-    
+    @IBOutlet weak var receiverRidControl: UISegmentedControl!
+
     @IBOutlet weak var speakerButton: UIButton!
     @IBOutlet weak var volumeSlider: UISlider!
     
@@ -35,6 +39,8 @@ class ViewController: UIViewController {
         speakerButton.isEnabled = false
         volumeSlider.isEnabled = false
         audioModeButton.isEnabled = false
+        receiverRidControl.isEnabled = false
+        receiverRidControl.selectedSegmentIndex = 0
     }
     
     @IBAction func switchCameraPosition(_ sender: AnyObject) {
@@ -80,8 +86,50 @@ class ViewController: UIViewController {
                     self.volumeSlider.isEnabled = true
                     self.volumeSlider.value = Float(MediaStreamAudioVolume.max)
                     self.audioModeButton.isEnabled = true
+                    self.receiverRidControl.isEnabled = true
+                    self.receiverRidControl.selectedSegmentIndex = 0
                 }
             }
+        }
+    }
+    
+    @IBAction func changeRid(_ sender: AnyObject) {
+        guard receiverMediaChannel?.connectionId != nil else {
+            return
+        }
+        
+        var request = URLRequest(url: URL(string: "http://\(soraURL.host!):\(soraAPIPort)")!)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Sora_20201005.RequestRtpStream", forHTTPHeaderField: "x-sora-target")
+        
+        var rid = "r0"
+        switch receiverRidControl.selectedSegmentIndex {
+        case 1:
+            rid = "r1"
+        case 2:
+            rid = "r2"
+        default:
+            break
+        }
+        Logger.info(type: logType, message: "change rid => \(rid)")
+        
+        do {
+            let json = ["channel_id": receiverMediaChannel!.configuration.channelId,
+                        "recv_connection_id": receiverMediaChannel!.connectionId,
+                        "rid": rid]
+            let body = try JSONSerialization.data(withJSONObject: json, options: [])
+            request.httpBody = body
+            Logger.info(type: logType, message: "send request => \(request.description)")
+
+            let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
+                if let error = error {
+                    Logger.info(type: logType, message: "request error: \(error)")
+                }
+            }
+            task.resume()
+        } catch let error {
+            Logger.info(type: logType, message: "JSON serialization error: \(error)")
         }
     }
     
@@ -150,10 +198,16 @@ class ViewController: UIViewController {
         }
         
         // 接続の設定を行います。
-        let config = Configuration(url: soraURL,
+        let multistreamEnabled = multiplicityControl.selectedSegmentIndex == 1
+        let simulcastEnabled = multiplicityControl.selectedSegmentIndex == 2
+        var config = Configuration(url: soraURL,
                                    channelId: soraChannelId,
                                    role: role,
-                                   multistreamEnabled: multiplicityControl.selectedSegmentIndex == 1)
+                                   multistreamEnabled: multistreamEnabled)
+        config.simulcastEnabled = simulcastEnabled
+        if simulcastEnabled {
+            config.videoCodec = .vp8
+        }
         
         // 接続します。
         // connect() の戻り値 ConnectionTask はここでは使いませんが、
@@ -161,7 +215,7 @@ class ViewController: UIViewController {
         let _ = Sora.shared.connect(configuration: config) { mediaChannel, error in
             // 接続に失敗するとエラーが渡されます。
             if let error = error {
-                print(error.localizedDescription)
+                Logger.info(type: logType, message: error.localizedDescription)
                 DispatchQueue.main.async {
                     connectButton.isEnabled = true
                     multiplicityControl.isEnabled = true
@@ -201,6 +255,8 @@ class ViewController: UIViewController {
             connectButton.setImage(UIImage(systemName: "play.fill"),
                                    for: .normal)
             self.audioModeButton.isEnabled = false
+            self.receiverRidControl.isEnabled = false
+            self.receiverRidControl.selectedSegmentIndex = 0
         }
     }
     
