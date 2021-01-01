@@ -224,10 +224,24 @@ class ViewController: UIViewController {
                                    multistreamEnabled: multistreamEnabled)
         config.simulcastEnabled = simulcastEnabled
         config.spotlightEnabled = spotlightEnabled
+        
         if simulcastEnabled || spotlightEnabled {
             config.videoCodec = .vp8
         }
+        
         if simulcastEnabled {
+            config.videoBitRate = 3000
+            
+            let capturer = CameraVideoCapturer.shared
+            let capturerSettings = CameraVideoCapturer.Settings.init(resolution: .hd1080p, frameRate: 30, canStop: true)
+            if capturer.isRunning {
+                capturer.stop()
+                capturer.settings = capturerSettings
+                capturer.start()
+            } else {
+                capturer.settings = capturerSettings
+            }
+
             if role == .recvonly {
                 switch receiverRidControl.selectedSegmentIndex {
                 case 0:
