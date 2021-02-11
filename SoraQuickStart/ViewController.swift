@@ -223,7 +223,7 @@ class ViewController: UIViewController {
                                    role: role,
                                    multistreamEnabled: multistreamEnabled)
         config.simulcastEnabled = simulcastEnabled
-        config.spotlightEnabled = spotlightEnabled
+        config.spotlightEnabled = spotlightEnabled ? .enabled : .disabled
         
         if simulcastEnabled || spotlightEnabled {
             config.videoCodec = .vp8
