@@ -2,10 +2,10 @@ import UIKit
 import Sora
 
 // 接続するサーバーのシグナリング URL
-let soraURL = URL(string: "ws://192.168.0.2:5000/signaling")!
+let soraURL = URL(string: "wss://sora.enm10k.com/signaling")!
 
 // チャネル ID
-let soraChannelId = "ios-quickstart"
+let soraChannelId = "sora"
 
 class ViewController: UIViewController {
     
@@ -150,11 +150,53 @@ class ViewController: UIViewController {
         }
         
         // 接続の設定を行います。
-        let config = Configuration(url: soraURL,
+        var config = Configuration(url: soraURL,
                                    channelId: soraChannelId,
                                    role: role,
                                    multistreamEnabled: multiplicityControl.selectedSegmentIndex == 1)
         
+        config.signalingConnectMetadata = ["message": "metadata from iOS SDK"]
+        config.signalingConnectNotifyMetadata = ["message": "signaling_notify_metadata from iOS SDK"]
+        let f = { (sig: Signaling) -> Void in
+            switch sig {
+            case .notifyConnection(let conn):
+            do {
+                if let authnMetadata = conn.authnMetadata {
+                    struct AuthnMetadata: Decodable {
+                        let message: String
+                        
+                        enum CodingKeys: String, CodingKey {
+                            case message = "message"
+                        }
+                    }
+                    
+                    struct Data: Decodable {
+                        let connectionId: String
+                        let message: String
+                        let eventType: String
+                        let authnMetadata: AuthnMetadata
+                    
+                        enum CodingKeys: String, CodingKey {
+                            case connectionId = "connection_id"
+                            case message = "message"
+                            case eventType = "event_type"
+                            case authnMetadata = "authn_metadata"
+                        }
+                    }
+                
+                    let container = try authnMetadata.decoder.container(keyedBy: Data.CodingKeys.self)
+                    let values = try container.decode(AuthnMetadata.self, forKey: .authnMetadata)
+                
+                    print("SIGNALING-DEBUG: \(values.message)")
+                }
+            } catch let error {
+                print("SIGNALING-DEBUG: " + error.localizedDescription)
+            }
+            default:
+                break
+            }
+        }
+        config.signalingChannelHandlers.onReceive = f
         // 接続します。
         // connect() の戻り値 ConnectionTask はここでは使いませんが、
         // 接続試行中の状態を強制的に終了させることができます。
