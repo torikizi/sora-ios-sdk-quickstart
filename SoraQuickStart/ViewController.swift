@@ -160,38 +160,11 @@ class ViewController: UIViewController {
         let f = { (sig: Signaling) -> Void in
             switch sig {
             case .notifyConnection(let conn):
-            do {
-                if let authnMetadata = conn.authnMetadata {
-                    struct AuthnMetadata: Decodable {
-                        let message: String
-                        
-                        enum CodingKeys: String, CodingKey {
-                            case message = "message"
-                        }
-                    }
-                    
-                    struct Data: Decodable {
-                        let connectionId: String
-                        let message: String
-                        let eventType: String
-                        let authnMetadata: AuthnMetadata
-                    
-                        enum CodingKeys: String, CodingKey {
-                            case connectionId = "connection_id"
-                            case message = "message"
-                            case eventType = "event_type"
-                            case authnMetadata = "authn_metadata"
-                        }
-                    }
-                
-                    let container = try authnMetadata.decoder.container(keyedBy: Data.CodingKeys.self)
-                    let values = try container.decode(AuthnMetadata.self, forKey: .authnMetadata)
-                
-                    print("SIGNALING-DEBUG: \(values.message)")
+                guard let authnMetadata = conn.authnMetadata as? [String: Any] else {
+                    print("SIGNALING-DEBUG: cast failed")
+                    return
                 }
-            } catch let error {
-                print("SIGNALING-DEBUG: " + error.localizedDescription)
-            }
+                print("SIGNALING-DEBUG: \(authnMetadata)")
             default:
                 break
             }
