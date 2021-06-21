@@ -3,6 +3,9 @@ import Sora
 
 // 接続するサーバーのシグナリング URL
 let soraURL = URL(string: "ws://192.168.0.2:5000/signaling")!
+// 接続するサーバーのシグナリング URL
+// アクセスを sora-labo に変える
+// let soraURL = URL(string: "wss:///signaling")!
 
 // チャネル ID
 let soraChannelId = "ios-quickstart"
@@ -157,6 +160,11 @@ class ViewController: UIViewController {
                                    role: role,
                                    multistreamEnabled: multiplicityControl.selectedSegmentIndex == 1)
         config.videoCodec = .av1
+        config.videoBitRate = 5000
+        // シグナリングキー
+        config.signalingConnectMetadata = ["signaling_key": ""]
+        let cameraSettings = CameraVideoCapturer.Settings(resolution: .hd720p, frameRate: 30, canStop: true)
+        config.videoCapturerDevice = VideoCapturerDevice.camera(settings: cameraSettings)
         
 
         if role == .recvonly {
