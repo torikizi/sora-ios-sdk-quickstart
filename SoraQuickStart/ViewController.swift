@@ -151,10 +151,13 @@ class ViewController: UIViewController {
         }
         
         // 接続の設定を行います。
-        let config = Configuration(url: soraURL,
+        // let を var に変更
+        var config = Configuration(url: soraURL,
                                    channelId: soraChannelId,
                                    role: role,
                                    multistreamEnabled: multiplicityControl.selectedSegmentIndex == 1)
+        config.videoCodec = .av1
+        
 
         if role == .recvonly {
             config.peerChannelHandlers.onAddStream = { mediaStream -> Void in
